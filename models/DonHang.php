@@ -170,4 +170,24 @@ class DonHang
             echo "Lỗi: " . $e->getMessage();
         }
     }
+     public function lichSuDonHang() {
+        // Giả sử bạn có model DonHang.php với method lấy đơn hàng theo user
+        session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            // Chưa đăng nhập thì chuyển hướng về login
+            header('Location: index.php?act=login');
+            exit;
+        }
+
+        // Gọi model để lấy danh sách đơn hàng
+        $userId = $_SESSION['user_id'];
+        $donHangModel = new DonHang();
+        $orders = $donHangModel->getOrdersByUser($userId);
+
+        // Truyền dữ liệu sang view
+        require_once './views/lich-su-don-hang.php';
+    }
+
+  
 }

@@ -51,7 +51,7 @@ class AdminTaiKhoanController
             if (empty($errors)) {
                 // Đặt pass mặc định
 
-                $password = password_hash('123@123ab', PASSWORD_BCRYPT);
+                $password = password_hash('123', PASSWORD_BCRYPT);
                 $chuc_vu_id = 1;
 
                 $this->modelTaiKhoan->insertTaiKhoan($ho_ten, $email, $password, $chuc_vu_id);
@@ -131,7 +131,7 @@ class AdminTaiKhoanController
         $tai_khoan_id = $_GET['id_quan_tri'];
         $tai_khoan = $this->modelTaiKhoan->getDetailTaiKhoan($tai_khoan_id);
         //  var_dump($tai_khoan['mat_khau']);die();
-        $password = password_hash('123@123ab', PASSWORD_BCRYPT);
+        $password = password_hash('123', PASSWORD_BCRYPT);
 
         $status = $this->modelTaiKhoan->resetPassword($tai_khoan_id, $password);
         // var_dump($status); die();
@@ -244,6 +244,20 @@ class AdminTaiKhoanController
 
     public function formLogin()
     {
+        // if(!empty($_SESSION['user_admin'])){
+        //     die("zzz");
+        //     header("Location:" . BASE_URL_ADMIN);
+        //     exit();
+        // }else{
+        //     die('chua dang nhap');
+        // }
+
+        // echo '<pre>';
+        // print_r($_SESSION);
+        // echo '</pre>';
+        // die();
+        // echo password_hash("123",PASSWORD_DEFAULT);
+
         if (isset($_SESSION['user_admin'])) {
             header('Location:' . BASE_URL_ADMIN);
             exit();
@@ -254,6 +268,9 @@ class AdminTaiKhoanController
 
     public function login()
     {
+                
+        
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // lay dl
             $email = $_POST['email'];
@@ -272,7 +289,7 @@ class AdminTaiKhoanController
             } else {
                 // Lỗi thì lưu lỗi vào session
                 $_SESSION['errors'] = $user;
-                //var_dump($_SESSION['errors']);die();
+                //    var_dump($_SESSION['errors']);die();
 
                 $_SESSION['flash'] = true;
 
@@ -375,8 +392,7 @@ class AdminTaiKhoanController
             $tai_khoan_id = $_POST['tai_khoan_id'];
             $ho_ten = $_POST['ho_ten'] ?? '';
             // Truy vấn 
-            // var_dump($_POST);
-            // die();
+
             $email = $_POST['email'] ?? '';
             $so_dien_thoai = $_POST['so_dien_thoai'] ?? '';
             $dia_chi = $_POST['dia_chi'] ?? '';
@@ -402,8 +418,7 @@ class AdminTaiKhoanController
             // Nếu k có lỗi thì thêm sản phẩm
             if (empty($errors)) {
                 $status = $this->modelTaiKhoan->updateTaiKhoanCaNhan($tai_khoan_id, $ho_ten, $email, $so_dien_thoai, $dia_chi);
-// var_dump($status);
-//             die();
+
                 if ($status) {
                     $_SESSION['thongtin'] = "Đã đổi thông tin thành công";
                     $_SESSION['flash'] = true;
